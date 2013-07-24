@@ -1,0 +1,26 @@
+{%set name = 'Darrell Silver'%}
+<html>
+<body>
+<h1>Work History for {{name}}:</h1><br><br>
+
+<h2>Total Jobs: {{Job.query.filter(Person.name==name).count()}}</h2>
+<ul>
+    <li>Guest Service: {{Job.query.filter_by(title='Guest Service').count()}}</li>
+    <li>Statarb: {{Job.query.filter_by(title='Statarb').count()}}</li>
+    <li>CEO: {{Job.query.filter_by(title='CEO').count()}}</li>
+</ul>
+
+<h2>His jobs:</h2>
+<ul>{%for job in Job.query.filter_by(Person.name=name) %}
+    <li>{{job}}</li>
+{%endfor%}</ul>
+
+<h2>All companies</h2>
+<ul>{%for company in distinct(Company.name)%}
+    <li>{{company}}</li>
+{%endfor%}</ul>
+
+{{distinct(Company.name)}}
+
+</body>
+</html>
