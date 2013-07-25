@@ -1,26 +1,24 @@
-{%set name = 'Darrell Silver'%}
 <html>
 <body>
-<h1>Work History for {{name}}:</h1><br><br>
+<h1>LinkedIn 0.0.0.0.0.0.1</h1>
+<h2>Work History for <em>{{name}}</em>:</h2>
 
-<h2>Total Jobs: {{Job.query.filter(Person.name==name).count()}}</h2>
-<ul>
-    <li>Guest Service: {{Job.query.filter_by(title='Guest Service').count()}}</li>
-    <li>Statarb: {{Job.query.filter_by(title='Statarb').count()}}</li>
-    <li>CEO: {{Job.query.filter_by(title='CEO').count()}}</li>
-</ul>
+<h3>Jobs ({{jobs.count()}}):</h3>
+<!-- <h4>{{jobs}}</h4> -->
+<ol>{%for job in jobs%}
+    <li>{{job.title}} at {{job.employer.name}}</li>
+{%endfor%}</ol>
 
-<h2>His jobs:</h2>
-<ul>{%for job in Job.query.filter_by(Person.name=name) %}
-    <li>{{job}}</li>
-{%endfor%}</ul>
 
-<h2>All companies</h2>
-<ul>{%for company in distinct(Company.name)%}
-    <li>{{company}}</li>
-{%endfor%}</ul>
+<h3>Titles ({{titles.count()}}):</h3>
+<ol>{%for title in titles%}
+	<li>{{title[0]}}</li>
+{%endfor%}</ol>
 
-{{distinct(Company.name)}}
+<h3>Employers ({{employers.count()}}):</h3>
+<ol>{%for employer, num_jobs in employers%}
+	<li>{{employer}} ({{num_jobs}} jobs)</li>
+{%endfor%}</ol>
 
 </body>
 </html>

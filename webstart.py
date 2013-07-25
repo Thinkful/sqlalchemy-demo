@@ -3,6 +3,7 @@
 
 import os, pdb
 from sqlalchemy import distinct, func
+from sqlalchemy.orm import scoped_session, sessionmaker
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask import Flask, render_template
 
@@ -87,10 +88,33 @@ def setup_dan():
     ]
     setup_person(name, work_history)
 
+
 @app.route('/')
 def index():
-    return render_template('career_history.html', Person=Person, Company=Company, Job=Job,
-        func=func, distinct=distinct)
+    return """<h1>LinkedIn 0.0.0.0.0.0.1</h1>
+<pre>
+    <a href="/Darrell%20Silver">Darrell</a>
+    <a href="/Daniel Friedman">Dan</a>
+</pre>"""
+
+@app.route('/<name>')
+def career_history(name):
+    # name = 'Darrell Silver'
+
+    # one strategy for querying
+    jobs = Job.query.join(Person).filter(Person.name==name)
+
+    # another querying strategy; more common, but uglier, IMO
+    titles = db.session.query(Job.title).join(Person) \
+        .filter(Person.name==name).distinct()
+
+    # is this any clearer than raw SQL? Seems silly.
+    employers = db.session.query(Company.name, func.count(Company.id)) \
+        .join(Job).join(Person) \
+        .filter(Person.name==name).group_by(Company.name)
+
+    return render_template('career_history.html', name=name, jobs=jobs, 
+        titles=titles, employers=employers)
 
 if __name__ == '__main__':
     print 'Dropping all...'
@@ -102,4 +126,11 @@ if __name__ == '__main__':
     app.run()
     # pdb.set_trace()
 
+    # <li>Guest Service: {{Job.query.filter_by(title='Guest Service').count()}}</li>
+    # <li>Statarb: {{Job.query.filter_by(title='Statarb').count()}}</li>
+    # <li>CEO: {{Job.query.filter_by(title='CEO').count()}}</li>
 
+# <h2>All companies</h2>
+# <ul>{%for company in distinct(Company.name)%}
+#     <li>{{company}}</li>
+# {%endfor%}</ul>
