@@ -1,4 +1,7 @@
 
+"""
+A single page app exmploring how to use SQLAlchemy & Flask.
+"""
 
 
 import os, pdb
@@ -116,21 +119,16 @@ def career_history(name):
     return render_template('career_history.html', name=name, jobs=jobs, 
         titles=titles, employers=employers)
 
-if __name__ == '__main__':
+def main():
     print 'Dropping all...'
     db.drop_all()
     print 'Creating all...'
     db.create_all()
     setup_darrell()
     setup_dan()
+    print 'Starting app...'
     app.run()
-    # pdb.set_trace()
 
-    # <li>Guest Service: {{Job.query.filter_by(title='Guest Service').count()}}</li>
-    # <li>Statarb: {{Job.query.filter_by(title='Statarb').count()}}</li>
-    # <li>CEO: {{Job.query.filter_by(title='CEO').count()}}</li>
+if __name__ == '__main__':
+    main()
 
-# <h2>All companies</h2>
-# <ul>{%for company in distinct(Company.name)%}
-#     <li>{{company}}</li>
-# {%endfor%}</ul>
