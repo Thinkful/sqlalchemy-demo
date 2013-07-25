@@ -10,15 +10,8 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask import Flask, render_template
 
-def env(name, default=None, required=True):
-    value = os.environ.get(name, default)
-    if required and not value:
-        raise Exception("Missing required environment var '%s'" % name)
-    return value
-
-
 app = Flask(__name__)
-app.debug = env("DEBUG", False, False) in ('True', 'true')
+app.debug = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/sqlalchemy-demo.db'
 db = SQLAlchemy(app)
 
