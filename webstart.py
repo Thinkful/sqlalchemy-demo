@@ -34,8 +34,6 @@ class Job(db.Model):
     __tablename__ = 'jobs'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
-    # start_date = db.Column(db.DateTime)
-    # end_date = db.Column(db.DateTime)
 
     person_id = db.Column(db.Integer, db.ForeignKey('people.id'))
     person = db.relationship('Person', backref='jobs')
@@ -50,8 +48,6 @@ class Company(db.Model):
     __tablename__ = 'companies'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
-    # industry_id = db.Column(db.Integer, db.ForeignKey('industries.id'))
-    # industry = db.relationship('Course', backref='curriculum_versions')
 
     def __repr__(self):
         return self.name
@@ -94,16 +90,17 @@ def setup_dan():
 
 @app.route('/')
 def index():
+    # note we've not bothered with a template, 
+    # and encoding the URL will work both ways in modern browsers 
+    # (though encoding w/ %20 is preferable)
     return """<h1>LinkedIn 0.0.0.0.0.0.1</h1>
 <pre>
     <a href="/Darrell%20Silver">Darrell</a>
-    <a href="/Daniel Friedman">Dan</a>
+    <a href="/Dan Friedman">Dan</a>
 </pre>"""
 
 @app.route('/<name>')
 def career_history(name):
-    # name = 'Darrell Silver'
-
     # one strategy for querying
     jobs = Job.query.join(Person).filter(Person.name==name)
 
